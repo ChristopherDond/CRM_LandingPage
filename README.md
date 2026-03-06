@@ -24,7 +24,6 @@
 
 - [About the Project](#-about-the-project)
 - [Features](#-features)
-- [Preview](#-preview)
 - [Tech Stack](#-tech-stack)
 - [Getting Started](#-getting-started)
 - [Folder Structure](#-folder-structure)
@@ -53,16 +52,6 @@
 - 💰 **Pricing Table** — Plans and pricing presented with clarity
 - 📬 **Contact Form / CTA** — Strategic call-to-action section
 - 🌐 **SEO Friendly** — Semantic HTML structure for better indexing
-
----
-
-## 🖥️ Preview
-
-<div align="center">
-
-| Desktop |
-|:-------:|
-| ![Desktop Preview](https://via.placeholder.com/500x300/6C63FF/ffffff?text=Desktop+View) |
 
 </div>
 
