@@ -60,9 +60,9 @@
 
 <div align="center">
 
-| Desktop | Mobile |
-|:-------:|:------:|
-| ![Desktop Preview](https://via.placeholder.com/500x300/6C63FF/ffffff?text=Desktop+View) | ![Mobile Preview](https://via.placeholder.com/250x450/6C63FF/ffffff?text=Mobile+View) |
+| Desktop |
+|:-------:|
+| ![Desktop Preview](https://via.placeholder.com/500x300/6C63FF/ffffff?text=Desktop+View) |
 
 </div>
 
