@@ -1,499 +1,1437 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projeto Integrador: CRM - Java & SQL</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>CRM Pipeline Flow - Sales Pipeline Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Configuração de fonte limpa */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --accent-blue: #60a5fa;
+            --bg-white: #ffffff;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #020617; /* Cor de fundo Navy mais escura (slate-950) */
-            color: #E2E8F0; /* Cor do texto principal (slate-200) */
-        }
-        /* Estilo para destaque de seção */
-        .section-header {
-            color: #22D3EE; /* Cor Ciano mais forte para destaque */
-            border-left: 6px solid #3B82F6; /* Borda azul para separação */
-        }
-        /* Estilo para o bloco de código aprimorado */
-        pre code {
-            display: block;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            background-color: #111827; /* Fundo escuro para o código (gray-900) */
-            color: #6EE7B7; /* Cor de destaque verde-claro para código */
-            overflow-x: auto;
-            border: 1px solid #1D4ED8; /* Borda azul sutil */
-        }
-        /* Estilo para o botão de tab/card ativo (interatividade) */
-        .tab-active {
-            background-color: #1E3A8A; /* Cor de fundo azul escuro para ativo */
-            color: #93C5FD; /* Cor do texto azul claro para ativo */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-white);
+            overflow-x: hidden;
         }
 
-        /* Estilo específico do Modal de Perfil (Inspirado no Discord) */
-        .discord-modal {
-            background-color: #202225; /* Fundo principal do modal (quase preto) */
-            color: #FFFFFF; /* Texto branco */
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
             border-radius: 8px;
-            box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 440px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
         }
 
-        .discord-header {
-            /* Banner - as cores específicas virão do JavaScript */
-            height: 100px; 
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
         }
 
-        .discord-avatar-container {
-            /* Corrigido para Relative para evitar sobreposições e quebra de layout */
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-white) 100%);
             position: relative;
-            margin-top: -60px; /* Sobe o container do avatar */
-            padding-left: 16px;
+            overflow: hidden;
         }
 
-        .discord-avatar {
-            border: 6px solid #202225; /* Borda da foto de perfil */
-            background-color: #17181a; /* Cor de fundo do avatar */
-            width: 92px;
-            height: 92px;
-            /* Corrigido: Removido top/left absolute */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
-        .discord-content {
-            padding-top: 16px; /* Espaço para o avatar */
-            background-color: #2f3136; /* Fundo do corpo do perfil */
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
 
-        .discord-role-badge {
-            background-color: #3b82f6; /* Cor do cargo (azul padrão) */
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero-content h1 span {
+            color: var(--primary-blue);
+            position: relative;
+        }
+
+        .hero-content h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(37, 99, 235, 0.2);
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-badges {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge-tech {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .app-preview {
+            background: var(--bg-dark);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.3s;
+        }
+
+        .app-preview:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .app-title {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-bar {
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 0.875rem;
+            flex: 1;
+        }
+
+        .new-lead-btn {
+            background: var(--primary-blue);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            color: white;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+        }
+
+        .kanban-column {
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            padding: 0.75rem;
+            min-height: 200px;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .column-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-purple { background: #a855f7; }
+        .dot-blue { background: #3b82f6; }
+        .dot-orange { background: #f97316; }
+        .dot-green { background: #22c55e; }
+        .dot-red { background: #ef4444; }
+
+        .lead-card {
+            background: rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid;
+        }
+
+        .lead-card.high { border-left-color: #ef4444; }
+        .lead-card.medium { border-left-color: #eab308; }
+
+        .lead-priority {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: var(--text-light);
+        }
+
+        .lead-name {
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .lead-company {
+            color: var(--text-light);
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .lead-value {
+            color: #22c55e;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* Sections General */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Features Grid */
+        .features {
+            background: var(--bg-white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-blue);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Pipeline Stages */
+        .pipeline {
+            background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-white) 100%);
+        }
+
+        .pipeline-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .stage-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .stage-card::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stage-card:last-child::after {
+            display: none;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stage-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .stage-new { background: linear-gradient(135deg, #a855f7, #9333ea); }
+        .stage-contacted { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .stage-proposal { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .stage-closed { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .stage-lost { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        .stage-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            background: var(--bg-white);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tech-logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tech-name {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .tech-version {
+            color: var(--primary-blue);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-purpose {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Architecture */
+        .architecture {
+            background: var(--bg-light);
+        }
+
+        .arch-diagram {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow-lg);
+            margin-top: 2rem;
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .arch-layer:nth-child(2) {
+            border-left-color: var(--accent-blue);
+        }
+
+        .arch-layer:nth-child(3) {
+            border-left-color: #22c55e;
+        }
+
+        .layer-icon {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .layer-content h3 {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .layer-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .layer-files {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .file-tag {
+            background: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-blue);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Data Fields */
+        .data-fields {
+            background: var(--bg-white);
+        }
+
+        .fields-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .fields-table th,
+        .fields-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .fields-table th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .fields-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .field-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Getting Started */
+        .getting-started {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .getting-started .section-tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .getting-started .section-title,
+        .getting-started .section-subtitle {
+            color: white;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-content {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+
+        /* Shortcuts */
+        .shortcuts {
+            background: var(--bg-light);
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .shortcut-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+
+        .shortcut-key {
+            padding: 0.5rem 1rem;
+            background: var(--bg-dark);
+            color: white;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .shortcut-action {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-text {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .kanban-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .pipeline-flow {
+                flex-direction: column;
+            }
+
+            .stage-card::after {
+                content: '↓';
+                right: 50%;
+                top: 100%;
+                transform: translateX(50%);
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .kanban-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
         }
     </style>
+<base target="_blank">
 </head>
-<body class="min-h-screen">
+<body>
 
-    <div id="profileModal" class="hidden fixed inset-0 z-[100] bg-black bg-opacity-75 flex items-center justify-center p-4" onclick="closeProfileModal()">
-        <div class="discord-modal relative" onclick="event.stopPropagation()">
-            <div id="profile-header" class="discord-header bg-gray-600"></div>
-            
-            <div class="discord-avatar-container">
-                <img id="profile-photo" class="discord-avatar rounded-full object-cover" src="https://via.placeholder.com/92/202225/FFFFFF?text=?" alt="Foto de Perfil">
-            </div>
-
-            <div class="discord-content p-4 space-y-4">
-                
-                <div class="border-b border-gray-600 pb-4">
-                    <h2 id="profile-name" class="text-3xl font-extrabold">Nome do Membro</h2>
-                    <span id="profile-role" class="discord-role-badge text-xs font-bold px-2 py-1 rounded-full uppercase mt-1 inline-block">Função no Projeto</span>
-                </div>
-                
-                <div class="space-y-2">
-                    <p class="text-xs font-semibold uppercase text-gray-400">Sobre Mim</p>
-                    <p id="profile-bio" class="text-sm text-gray-300 italic">Bio do Membro.</p>
-                </div>
-                
-                <div id="profile-links" class="pt-2">
-                    <p class="text-xs font-semibold uppercase text-gray-400 mb-2">Links</p>
-                    <a id="profile-github" href="#" target="_blank" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition duration-200">
-                        <i class="fab fa-github mr-2"></i>
-                        <span class="text-sm">Repositório Pessoal</span>
-                    </a>
-                </div>
-
-                <button onclick="closeProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition duration-200">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-    <nav class="sticky top-0 z-50 bg-gray-900 shadow-xl border-b border-cyan-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="#" class="flex-shrink-0 text-xl font-bold text-cyan-400">
-                    <i class="fas fa-desktop mr-2"></i> CRM.Java
-                </a>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-4">
-                    <a href="#proposito" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Propósito</a>
-                    <a href="#tecnologias" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tecnologias</a>
-                    <a href="#arquitetura" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Arquitetura</a>
-                    <a href="#beneficios" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Benefícios</a>
-                    <a href="#equipe" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Equipe por tras do projeto</a>
-                </div>
-                <button id="mobile-menu-button" type="button" class="sm:hidden text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-        <div class="sm:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="#proposito" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Propósito</a>
-                <a href="#tecnologias" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tecnologias</a>
-                <a href="#arquitetura" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Arquitetura</a>
-                <a href="#beneficios" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Benefícios</a>
-                <a href="#equipe" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Equipe por tras do projeto</a>
-            </div>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">◈</div>
+                CRM Pipeline Flow
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pipeline">Pipeline</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#data">Data Model</a></li>
+                <li><a href="#getting-started">Get Started</a></li>
+            </ul>
         </div>
     </nav>
-    
-    <div class="p-4 sm:p-8">
 
-        <header class="text-center mb-16 pt-12 pb-10 rounded-2xl shadow-2xl bg-gray-900 border border-blue-800" data-aos="fade-up">
-            <h1 class="text-5xl sm:text-6xl font-extrabold text-white leading-tight">
-                <i class="fas fa-handshake mr-3 text-blue-500 animate-pulse"></i>
-                Projeto Integrador: CRM
-            </h1>
-            <h2 class="text-2xl sm:text-3xl mt-4 font-medium text-cyan-400">
-                Java & SQL Server - Integração Completa
-            </h2>
-            <div class="mt-8">
-                <a href="https://github.com/ChristopherDond/CRM.Java/blob/main/index2.html" target="_blank" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition duration-300 transform hover:scale-105">
-                    <i class="fab fa-github mr-2"></i> Ver Repositório Completo
-                </a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Modern Sales <span>Pipeline Management</span></h1>
+                <p class="hero-subtitle">
+                    A professional desktop application built with JavaFX for managing 
+                    sales leads through a dynamic and interactive Kanban board.
+                </p>
+                <div class="hero-badges">
+                    <span class="badge badge-tech">Java 21</span>
+                    <span class="badge badge-tech">JavaFX</span>
+                    <span class="badge badge-tech">Maven</span>
+                    <span class="badge">Open Source</span>
+                    <span class="badge">Dark UI</span>
+                </div>
             </div>
-        </header>
-        
-        <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
-        
-            <div class="lg:col-span-1 space-y-12">
-        
-                <section id="proposito" class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-right">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-bullseye mr-3"></i> Propósito Central
-                    </h3>
-                    <div class="space-y-4 text-gray-300">
-                        <p class="text-lg">O projeto implementa um Sistema de Gerenciamento de Relacionamento com o Cliente (CRM) de base, totalmente focado na persistência de dados.</p>
-                        <blockquote class="border-l-4 border-cyan-500 pl-4 italic text-sm">
-                            Motivação: Demonstrar de forma prática a conexão estável e o tráfego de dados eficiente entre uma aplicação back-end (Java) e um banco de dados relacional (SQL Server).
-                        </blockquote>
-                        <p>O Escopo Principal é validar o ciclo completo de CRUD (com foco em Inserção e Leitura) e a aplicação dos conceitos de Programação Orientada a Objetos (POO) e Modelagem de Dados.</p>
+            <div class="hero-visual">
+                <div class="app-preview">
+                    <div class="app-header">
+                        <div class="app-title">
+                            <span style="color: var(--primary-blue);">◈</span>
+                            CRM Pipeline
+                        </div>
+                        <div class="search-bar">🔍 Search...</div>
+                        <div class="new-lead-btn">+ New Lead</div>
                     </div>
-                </section>
-
-                <section id="arquitetura" class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-right" data-aos-delay="200">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-cube mr-3"></i> Diagrama de Arquitetura
-                    </h3>
-                    <div class="space-y-4 text-gray-300">
-                        <p>Adotamos uma arquitetura de duas camadas simplificadas, onde a lógica de negócios está majoritariamente centralizada no banco de dados.</p>
-                        <ul class="space-y-3 list-none p-0">
-                            <li class="flex items-center"><i class="fas fa-layer-group text-blue-500 mr-3"></i> Camada de Apresentação/Lógica (Java): Aplicação de terminal (`main`), classes de Entidade (POO), e a camada DAO (Data Access Object) para o JDBC.</li>
-                            <li class="flex items-center"><i class="fas fa-server text-cyan-500 mr-3"></i> Camada de Dados (SQL Server): Tabelas, Esquemas Relacionais e Stored Procedures que executam o CRUD.</li>
-                        </ul>
-                        <p class="text-sm italic text-gray-400 mt-4">Isso garante segurança (previne SQL Injection) e desempenho ao usar procedimentos pré-compilados.</p>
-                        
-                    </div>
-                </section>
-        
-                <section id="equipe" class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-right" data-aos-delay="400">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-users-cog mr-3"></i> A Equipe por tras do projeto
-                    </h3>
-                    <ul class="grid grid-cols-2 gap-4 text-lg text-white">
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('christopher')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Christopher
-                        </li>
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('gabryel')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Gabryel
-                        </li>
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('mauricio')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Mauricio
-                        </li>
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('henrique')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Henrique
-                        </li>
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('nicole')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Nicole
-                        </li>
-                        <li class="flex items-center p-2 rounded-md hover:bg-gray-800 transition duration-200 cursor-pointer" onclick="openProfileModal('kauan')">
-                            <i class="fas fa-user-circle mr-3 text-cyan-400"></i> Kauan
-                        </li>
-                    </ul>
-                </section>
-        
-            </div>
-        
-            <div class="lg:col-span-2 space-y-12">
-        
-                <section id="tecnologias" class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-left">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-microchip mr-3"></i> Core Tecnológico
-                    </h3>
-        
-                    <div class="flex flex-wrap gap-4 mb-6 border-b border-gray-700 pb-4">
-                        <button class="tech-tab px-4 py-2 rounded-lg font-semibold transition duration-300 tab-active" data-tech="java">
-                            <i class="fab fa-java mr-2"></i> Java / JDBC
-                        </button>
-                        <button class="tech-tab px-4 py-2 rounded-lg font-semibold transition duration-300" data-tech="sql">
-                            <i class="fas fa-database mr-2"></i> SQL Server
-                        </button>
-                        <button class="tech-tab px-4 py-2 rounded-lg font-semibold transition duration-300" data-tech="sp">
-                            <i class="fas fa-code-branch mr-2"></i> Stored Procedures
-                        </button>
-                    </div>
-        
-                    <div id="java-content" class="tech-content space-y-4">
-                        <h4 class="text-2xl text-blue-400 font-semibold flex items-center"><i class="fab fa-java mr-2"></i> Java (JDBC) - A Lógica da Aplicação</h4>
-                        <p class="text-gray-300">Implementação da lógica, interface de usuário simples (via `JOptionPane` ou console) e a Camada de Acesso a Dados (DAO). O JDBC é o pilar para a comunicação com o SGBD.</p>
-                        <div class="bg-gray-950 p-4 rounded-lg">
-                            <h5 class="text-white font-medium mb-2">Exemplo de Código (Conexão JDBC):</h5>
-                            <pre><code>String URL = "jdbc:sqlserver://[Server];..."
-Connection conn = DriverManager.getConnection(URL);
-// Uso de Prepared/CallableStatement para segurança
-// e execução de Stored Procedures.</code></pre>
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">Total</div>
+                            <div class="stat-value">6 leads</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Pipeline</div>
+                            <div class="stat-value">$128K</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Closed</div>
+                            <div class="stat-value">$18K</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Conversion</div>
+                            <div class="stat-value">16%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Deals</div>
+                            <div class="stat-value">1 deal</div>
                         </div>
                     </div>
-        
-                    <div id="sql-content" class="tech-content space-y-4 hidden">
-                        <h4 class="text-2xl text-blue-400 font-semibold flex items-center"><i class="fas fa-database mr-2"></i> SQL Server - Persistência Segura</h4>
-                        <p class="text-gray-300">Utilizado como o SGBD para o armazenamento persistente e relacional de todas as entidades críticas do CRM: Clientes, Contatos, Oportunidades e Produtos.</p>
-                        <div class="bg-gray-950 p-4 rounded-lg">
-                            <h5 class="text-white font-medium mb-2">Trecho SQL (Criação da Tabela de Clientes):</h5>
-                            <pre><code>CREATE TABLE Clientes (
-    ClienteID INT PRIMARY KEY IDENTITY(1,1),
-    Nome VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) UNIQUE,
-    DataCadastro DATE DEFAULT GETDATE()
-);</code></pre>
+                    <div class="kanban-board">
+                        <div class="kanban-column">
+                            <div class="column-header">
+                                <div class="column-dot dot-purple"></div>
+                                New Lead (2)
+                            </div>
+                            <div class="lead-card high">
+                                <div class="lead-priority">HIGH</div>
+                                <div class="lead-name">Maria S.</div>
+                                <div class="lead-company">TechCorp</div>
+                                <div class="lead-value">$15,000</div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="column-header">
+                                <div class="column-dot dot-blue"></div>
+                                Contacted (2)
+                            </div>
+                            <div class="lead-card high">
+                                <div class="lead-priority">HIGH</div>
+                                <div class="lead-name">Anna C.</div>
+                                <div class="lead-company">Logistics Co</div>
+                                <div class="lead-value">$25,000</div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="column-header">
+                                <div class="column-dot dot-orange"></div>
+                                Proposal (1)
+                            </div>
+                            <div class="lead-card high">
+                                <div class="lead-priority">HIGH</div>
+                                <div class="lead-name">Carlos Lima</div>
+                                <div class="lead-company">FinTech Solutions</div>
+                                <div class="lead-value">$50,000</div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="column-header">
+                                <div class="column-dot dot-green"></div>
+                                Closed (1)
+                            </div>
+                            <div class="lead-card medium">
+                                <div class="lead-priority">MED</div>
+                                <div class="lead-name">Fernanda</div>
+                                <div class="lead-company">EduTech Brasil</div>
+                                <div class="lead-value">$18,000</div>
+                            </div>
+                        </div>
+                        <div class="kanban-column">
+                            <div class="column-header">
+                                <div class="column-dot dot-red"></div>
+                                Lost (0)
+                            </div>
                         </div>
                     </div>
-        
-                    <div id="sp-content" class="tech-content space-y-4 hidden">
-                        <h4 class="text-2xl text-blue-400 font-semibold flex items-center"><i class="fas fa-code-branch mr-2"></i> Stored Procedures - Segurança e Desempenho</h4>
-                        <p class="text-gray-300">O método de comunicação principal. Ao centralizar a lógica de Inserção/Atualização no banco (Stored Procedures), ganhamos em segurança (mitiga SQL Injection) e desempenho (código pré-compilado).</p>
-                        <div class="bg-gray-950 p-4 rounded-lg">
-                            <h5 class="text-white font-medium mb-2">Chamada de Stored Procedure (Java):</h5>
-                            <pre><code>String call = "{call SP_INSERIR_CLIENTE(?, ?)}";
-try (CallableStatement cs = conn.prepareCall(call)) {
-    cs.setString(1, cliente.getNome());
-    cs.setString(2, cliente.getEmail());
-    cs.executeUpdate();
-}</code></pre>
-                        </div>
-                    </div>
-        
-                </section>
-        
-                <section class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-left" data-aos-delay="200">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-list-check mr-3"></i> O Que o CRM Faz
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <ul class="space-y-4 list-none p-0">
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-user-plus text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Gerenciamento de Clientes:</strong>
-                                    <p class="text-sm text-gray-400">Criação e listagem de clientes essenciais.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-phone-alt text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Vinculação de Contatos:</strong>
-                                    <p class="text-sm text-gray-400">Associação de detalhes de contato a um cliente por ID.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-box-open text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Cadastro de Produtos:</strong>
-                                    <p class="text-sm text-gray-400">Inserção de novos produtos com campos opcionais.</p>
-                                </div>
-                            </li>
-                        </ul>
-                        <ul class="space-y-4 list-none p-0">
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-chart-line text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Registro de Oportunidades:</strong>
-                                    <p class="text-sm text-gray-400">Inserção de registros de venda/oportunidade com status.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-history text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Auditoria Rápida:</strong>
-                                    <p class="text-sm text-gray-400">Exibição dos últimos 5 registros inseridos (teste de `SELECT TOP`).</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start bg-gray-800 p-3 rounded-lg hover:bg-gray-700 transition duration-200">
-                                <i class="fas fa-exclamation-triangle text-blue-400 text-xl mr-3 mt-1"></i>
-                                <div>
-                                    <strong class="text-white">Tratamento de Exceções:</strong>
-                                    <p class="text-sm text-gray-400">Gerenciamento robusto de erros de conexão e SQL (`try-with-resources`).</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-        
-                <section id="beneficios" class="bg-gray-900 p-8 rounded-xl shadow-2xl border border-gray-700" data-aos="fade-left" data-aos-delay="400">
-                    <h3 class="section-header text-3xl font-bold pl-4 mb-6 pb-2">
-                        <i class="fas fa-graduation-cap mr-3"></i> O Que Aprendemos
-                    </h3>
-                    <div class="grid md:grid-cols-2 gap-4 text-gray-300">
-                        <ul class="space-y-3 list-none p-0">
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> Padrão JDBC: Domínio na conexão e manipulação de dados com Java.</li>
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> Modelagem Relacional: Fortalecimento na criação de entidades e relacionamentos (1:N, N:M e 1:1).</li>
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> POO Prática: Aplicação de classes, atributos e encapsulamento em um contexto real.</li>
-                        </ul>
-                        <ul class="space-y-3 list-none p-0">
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> Segurança: Uso de `CallableStatement` contra SQL Injection.</li>
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> Stored Procedures: Transferência da lógica de negócios para o SGBD.</li>
-                            <li class="flex items-start text-lg"><i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i> Tratamento de Erros: Implementação de `try-with-resources` e exceções SQL.</li>
-                        </ul>
-                    </div>
-                </section>
-        
+                </div>
             </div>
-        
-        </main>
-        
-        <footer class="text-center mt-16 py-6 text-gray-600 text-sm border-t border-gray-800">
-            Projeto Integrador CRM - Desenvolvido pela Equipe. 2025
-        </footer>
-    </div>
+        </div>
+    </section>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything You Need to Manage Sales</h2>
+                <p class="section-subtitle">
+                    Complete and professional interface with advanced pipeline management features
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3 class="feature-title">Interactive Kanban Board</h3>
+                    <p class="feature-description">
+                        Visualize your pipeline in 5 customizable stages with drag-and-drop interface. 
+                        Move leads between columns effortlessly with smooth animations.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Real-Time Statistics</h3>
+                    <p class="feature-description">
+                        Dashboard with instantly updated metrics: total leads, 
+                        pipeline value, closed value, conversion rate, and closed deals.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">Complete Lead Management</h3>
+                    <p class="feature-description">
+                        Add and edit leads through complete modal forms. 
+                        Double-click to edit, right-click for context menu.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Search & Filters</h3>
+                    <p class="feature-description">
+                        Filter cards by name, company, or email in real-time. 
+                        Instant search that updates the Kanban automatically.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Priority System</h3>
+                    <p class="feature-description">
+                        HIGH/MEDIUM/LOW classification with color visual indicators. 
+                        Quickly identify the most important deals.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3 class="feature-title">Data Persistence</h3>
+                    <p class="feature-description">
+                        Automatic saving to local JSON on every change. 
+                        Data automatically restored on next launch.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Stages -->
+    <section id="pipeline" class="pipeline">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Workflow</span>
+                <h2 class="section-title">Pipeline Stages</h2>
+                <p class="section-subtitle">
+                    Structured sales process in 5 clear and color-coded phases
+                </p>
+            </div>
+            <div class="pipeline-flow">
+                <div class="stage-card">
+                    <div class="stage-icon stage-new">1</div>
+                    <h3 class="stage-name">New Lead</h3>
+                    <p class="stage-desc">Prospect identified and initially qualified</p>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-icon stage-contacted">2</div>
+                    <h3 class="stage-name">Contacted</h3>
+                    <p class="stage-desc">First contact made with the lead</p>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-icon stage-proposal">3</div>
+                    <h3 class="stage-name">Proposal Sent</h3>
+                    <p class="stage-desc">Commercial proposal sent to client</p>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-icon stage-closed">4</div>
+                    <h3 class="stage-name">Closed</h3>
+                    <p class="stage-desc">Deal won and successfully closed</p>
+                </div>
+                <div class="stage-card">
+                    <div class="stage-icon stage-lost">5</div>
+                    <h3 class="stage-name">Lost</h3>
+                    <p class="stage-desc">Lost opportunity archived</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="technology" class="tech-stack">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Technology Stack</span>
+                <h2 class="section-title">Technologies Used</h2>
+                <p class="section-subtitle">
+                    Modern Java-based architecture with best practices
+                </p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-logo">☕</div>
+                    <h3 class="tech-name">Java</h3>
+                    <div class="tech-version">v21 LTS</div>
+                    <p class="tech-purpose">Core language with modern features</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-logo">🎨</div>
+                    <h3 class="tech-name">JavaFX</h3>
+                    <div class="tech-version">v21</div>
+                    <p class="tech-purpose">Rich and responsive UI framework</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-logo">📦</div>
+                    <h3 class="tech-name">Maven</h3>
+                    <div class="tech-version">v3.9+</div>
+                    <p class="tech-purpose">Build and dependency management</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-logo">🗄️</div>
+                    <h3 class="tech-name">Gson</h3>
+                    <div class="tech-version">v2.10.1</div>
+                    <p class="tech-purpose">JSON serialization for persistence</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section id="architecture" class="architecture">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Architecture</span>
+                <h2 class="section-title">Project Structure</h2>
+                <p class="section-subtitle">
+                    Organized and scalable MSV (Model-Service-View) pattern
+                </p>
+            </div>
+            <div class="arch-diagram">
+                <div class="arch-layers">
+                    <div class="arch-layer">
+                        <div class="layer-icon">👁️</div>
+                        <div class="layer-content">
+                            <h3>View (Presentation Layer)</h3>
+                            <p>JavaFX graphical interface, responsible for Kanban rendering and user interactions</p>
+                            <div class="layer-files">
+                                <span class="file-tag">KanbanBoard.java</span>
+                                <span class="file-tag">LeadFormDialog.java</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="layer-icon">⚙️</div>
+                        <div class="layer-content">
+                            <h3>Service (Business Layer)</h3>
+                            <p>Business logic, data manipulation, and automatic JSON persistence</p>
+                            <div class="layer-files">
+                                <span class="file-tag">LeadService.java</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="arch-layer">
+                        <div class="layer-icon">📋</div>
+                        <div class="layer-content">
+                            <h3>Model (Data Layer)</h3>
+                            <p>Domain entities and objects representing leads and their attributes</p>
+                            <div class="layer-files">
+                                <span class="file-tag">Lead.java</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Fields -->
+    <section id="data" class="data-fields">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Data Model</span>
+                <h2 class="section-title">Lead Fields</h2>
+                <p class="section-subtitle">
+                    Complete data structure stored for each lead
+                </p>
+            </div>
+            <table class="fields-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Name</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Full contact name (required)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Business email address</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Contact phone number</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Company</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Company/organization name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Value</strong></td>
+                        <td><span class="field-type">Double</span></td>
+                        <td>Estimated deal value in USD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Priority</strong></td>
+                        <td><span class="field-type">Enum</span></td>
+                        <td>Level: HIGH / MEDIUM / LOW</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stage</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Current pipeline stage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Notes</strong></td>
+                        <td><span class="field-type">String</span></td>
+                        <td>Internal observations and notes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Created</strong></td>
+                        <td><span class="field-type">Date</span></td>
+                        <td>Automatic creation date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Getting Started -->
+    <section id="getting-started" class="getting-started">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Getting Started</span>
+                <h2 class="section-title">How to Run the Project</h2>
+                <p class="section-subtitle">
+                    Simple and quick installation in just a few commands
+                </p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Clone the Repository</h3>
+                    <p class="step-content">Download the source code from GitHub</p>
+                    <div class="code-block">git clone https://github.com/ChristopherDond/CRM-Pipeline-Flow.git</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Navigate to Project</h3>
+                    <p class="step-content">Enter the application directory</p>
+                    <div class="code-block">cd CRM-Pipeline-Flow/crm-pipeline</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Run with Maven</h3>
+                    <p class="step-content">Compile and run the application</p>
+                    <div class="code-block">mvn javafx:run</div>
+                </div>
+            </div>
+            <div style="margin-top: 3rem; text-align: center; opacity: 0.9;">
+                <p style="margin-bottom: 1rem;">⚠️ <strong>Requirements:</strong> Java JDK 21+ and Apache Maven 3.9+</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    On first run, Maven will download JavaFX and Gson dependencies. 
+                    This may take 1-2 minutes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keyboard Shortcuts -->
+    <section class="shortcuts">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Productivity</span>
+                <h2 class="section-title">Keyboard Shortcuts</h2>
+                <p class="section-subtitle">
+                    Navigate faster with intuitive commands
+                </p>
+            </div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-card">
+                    <span class="shortcut-key">Enter</span>
+                    <span class="shortcut-action">Save form (when open)</span>
+                </div>
+                <div class="shortcut-card">
+                    <span class="shortcut-key">Esc</span>
+                    <span class="shortcut-action">Close modal/cancel</span>
+                </div>
+                <div class="shortcut-card">
+                    <span class="shortcut-key">Double-click</span>
+                    <span class="shortcut-action">Open lead edit</span>
+                </div>
+                <div class="shortcut-card">
+                    <span class="shortcut-key">Right-click</span>
+                    <span class="shortcut-action">Context menu (edit/move/delete)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="https://github.com/ChristopherDond/CRM-Pipeline-Flow" target="_blank">GitHub</a>
+                <a href="#features">Features</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#getting-started">Documentation</a>
+            </div>
+            <p class="footer-text">
+                CRM Pipeline Flow • Open Source Project under MIT License<br>
+                Built with JavaFX by Christopher Dondé
+            </p>
+        </div>
+    </footer>
+
     <script>
-        AOS.init({
-            duration: 800,
-            once: true,
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
 
-        // =========================================================
-        // Dados de Perfil da Equipe e Lógica do Modal
-        // =========================================================
-
-        const defaultAvatar = "https://via.placeholder.com/92/202225/FFFFFF?text=?";
-        const teamProfiles = {
-            'christopher': {
-                name: 'Christopher',
-                role: 'Arquiteto de Dados & Dev Back-end (Java)',
-                bio: 'Focado em garantir a robustez da **arquitetura de persistência** e a segurança das transações CRUD, utilizando Stored Procedures em SQL Server.',
-                photo: defaultAvatar.replace('?', 'C'),
-                github: '#',
-                bannerColor: 'bg-blue-600'
-            },
-            'gabryel': {
-                name: 'Gabryel',
-                role: 'Desenvolvedor Java - POO e Classes',
-                bio: 'Responsável pela implementação dos conceitos de **Programação Orientada a Objetos** em Java, garantindo que as classes de Entidade (POO) sigam os padrões.',
-                photo: defaultAvatar.replace('?', 'G'),
-                github: '#',
-                bannerColor: 'bg-cyan-600'
-            },
-            'mauricio': {
-                name: 'Mauricio',
-                role: 'Modelagem de Banco de Dados (SQL)',
-                bio: 'Especialista em **modelagem relacional**. Garantiu a correta estrutura das tabelas, chaves primárias e relacionamentos (1:N, N:M) para o projeto CRM.',
-                photo: defaultAvatar.replace('?', 'M'),
-                github: '#',
-                bannerColor: 'bg-green-600'
-            },
-            'henrique': {
-                name: 'Henrique',
-                role: 'Analista de Conexão (JDBC)',
-                bio: 'Focado na camada de acesso a dados (DAO) e na utilização correta do **JDBC**. Seu papel foi fundamental na garantia de conexões estáveis com o SQL Server.',
-                photo: defaultAvatar.replace('?', 'H'),
-                github: '#',
-                bannerColor: 'bg-indigo-600'
-            },
-            'nicole': {
-                name: 'Nicole',
-                role: 'Quality Assurance & Tratamento de Erros',
-                bio: 'Garantiu a estabilidade da aplicação com a implementação de **tratamento de exceções** robusto (`try-with-resources`) e testes de CRUD.',
-                photo: defaultAvatar.replace('?', 'N'),
-                github: '#',
-                bannerColor: 'bg-pink-600'
-            },
-            'kauan': {
-                name: 'Kauan',
-                role: 'Desenvolvedor SQL - Stored Procedures',
-                bio: 'Responsável pela escrita e otimização das **Stored Procedures** no SQL Server, garantindo que a lógica de negócio do CRUD fosse executada no SGBD.',
-                photo: defaultAvatar.replace('?', 'K'),
-                github: '#',
-                bannerColor: 'bg-yellow-600'
-            }
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        const modal = document.getElementById('profileModal');
-        const profilePhoto = document.getElementById('profile-photo');
-        const profileHeader = document.getElementById('profile-header');
-        const profileName = document.getElementById('profile-name');
-        const profileRole = document.getElementById('profile-role');
-        const profileBio = document.getElementById('profile-bio');
-        const profileGithub = document.getElementById('profile-github');
-        const profileLinks = document.getElementById('profile-links');
-
-        function openProfileModal(memberId) {
-            const profile = teamProfiles[memberId];
-            if (!profile) return;
-
-            // 1. Preenche o Modal com os dados
-            profileName.textContent = profile.name;
-            profileRole.textContent = profile.role;
-            profileBio.innerHTML = profile.bio;
-
-            // 2. Foto de perfil e links
-            profilePhoto.src = profile.photo;
-            profileGithub.href = profile.github || '#';
-            profileLinks.classList.toggle('hidden', !profile.github || profile.github === '#');
-
-            // 3. Define a cor do banner (Remoção segura das cores)
-            profileHeader.className = 'discord-header'; // Reseta classes
-            profileHeader.classList.add(profile.bannerColor);
-
-            // 4. Mostra o Modal
-            modal.classList.remove('hidden');
-        }
-
-        function closeProfileModal() {
-            modal.classList.add('hidden');
-        }
-
-        // =========================================================
-        // Lógica para as Abas Interativas (Tech Tabs)
-        // =========================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            const tabs = document.querySelectorAll('.tech-tab');
-            const contents = document.querySelectorAll('.tech-content');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tech = tab.getAttribute('data-tech');
-
-                    // CORREÇÃO: Remove 'tab-active' de todos os botões
-                    tabs.forEach(t => t.classList.remove('tab-active'));
-                    
-                    // Adiciona 'tab-active' ao botão clicado
-                    tab.classList.add('tab-active');
-
-                    // Oculta/Mostra o conteúdo
-                    contents.forEach(content => content.classList.add('hidden'));
-                    document.getElementById(tech + '-content').classList.remove('hidden');
-                });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
             });
+        }, observerOptions);
 
-            // Lógica para o menu mobile
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+        document.querySelectorAll('.feature-card, .stage-card, .tech-card, .step-card').forEach(el => {
+            observer.observe(el);
         });
     </script>
+
 </body>
 </html>
