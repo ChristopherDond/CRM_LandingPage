@@ -1,106 +1,161 @@
-# ◈ CRM Pipeline Flow
+<div align="center">
 
-> A professional desktop CRM application for managing sales leads through a dynamic Kanban board.
+<img src="https://img.shields.io/badge/CRM-Landing%20Page-6C63FF?style=for-the-badge&logo=google-chrome&logoColor=white" alt="CRM Landing Page" />
 
-[![Java](https://img.shields.io/badge/Java-21%20LTS-blue?logo=openjdk&logoColor=white)](https://openjdk.org/)
-[![JavaFX](https://img.shields.io/badge/JavaFX-21-007396?logo=java&logoColor=white)](https://openjdk.org/projects/openjfx/)
-[![Maven](https://img.shields.io/badge/Maven-3.9+-C71A36?logo=apachemaven&logoColor=white)](https://maven.apache.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+# 🚀 CRM Landing Page
 
-<p align="center">
-  <img src="screenshot.png" alt="CRM Pipeline Flow Screenshot" width="800">
-</p>
+**A modern and responsive landing page to showcase a CRM platform.**
+
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)]()
+
+<br/>
+
+[🔗 Live Demo](#) · [📝 Report a Bug](https://github.com/ChristopherDond/CRM_LandingPage/issues) · [💡 Request a Feature](https://github.com/ChristopherDond/CRM_LandingPage/issues)
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [About the Project](#-about-the-project)
+- [Features](#-features)
+- [Preview](#-preview)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Folder Structure](#-folder-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
+
+---
+
+## 🎯 About the Project
+
+**CRM Landing Page** is a sleek and fully responsive web interface designed to showcase a **Customer Relationship Management (CRM)** platform. Built with a focus on modern design, performance, and user experience, the goal is to convert visitors into qualified leads.
+
+> Perfect for companies and startups that want to present their CRM product with a professional and compelling digital presence.
+
+---
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| **📋 Kanban Board** | Visual pipeline with 5 customizable stages |
-| **🖱️ Drag & Drop** | Move deals between columns effortlessly |
-| **📊 Real-time Stats** | Dashboard with total leads, pipeline value, conversion rate |
-| **➕ Add/Edit Leads** | Full modal form with all contact details |
-| **🖱️ Right-click Menu** | Edit, move, or delete leads instantly |
-| **🔍 Search & Filter** | Filter cards by name, company or email in real-time |
-| **🎯 Priority System** | HIGH / MEDIUM / LOW with color indicators |
-| **💾 Data Persistence** | Auto-saves to local JSON on every change |
-| **🌙 Dark UI** | Clean, modern dark theme with color-coded columns |
+- 🎨 **Modern Design** — Clean interface with a carefully crafted color palette
+- 📱 **Fully Responsive** — Optimized for desktop, tablet, and mobile
+- ⚡ **High Performance** — Lean code built for fast load times
+- 🎭 **Smooth Animations** — Elegant transitions and visual effects
+- 📊 **Features Section** — Highlights the key capabilities of the CRM
+- 💬 **Testimonials** — Social proof to boost conversions
+- 💰 **Pricing Table** — Plans and pricing presented with clarity
+- 📬 **Contact Form / CTA** — Strategic call-to-action section
+- 🌐 **SEO Friendly** — Semantic HTML structure for better indexing
 
-## 🗂️ Pipeline Stages
-┌─────────────┐    ┌─────────────┐    ┌──────────────┐    ┌─────────────┐    ┌─────────────┐
-│  New Lead   │ →  │  Contacted  │ →  │Proposal Sent │ →  │   Closed    │ →  │    Lost     │
-│   Purple    │    │    Blue     │    │    Orange    │    │    Green    │    │     Red     │
-└─────────────┘    └─────────────┘    └──────────────┘    └─────────────┘    └─────────────┘
-plain
-Copy
+---
 
-## 🚀 Quick Start
+## 🖥️ Preview
+
+<div align="center">
+
+| Desktop | Mobile |
+|:-------:|:------:|
+| ![Desktop Preview](https://via.placeholder.com/500x300/6C63FF/ffffff?text=Desktop+View) | ![Mobile Preview](https://via.placeholder.com/250x450/6C63FF/ffffff?text=Mobile+View) |
+
+</div>
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat&logo=html5&logoColor=white) | Semantic page structure |
+| ![CSS3](https://img.shields.io/badge/-CSS3-1572B6?style=flat&logo=css3&logoColor=white) | Styling and animations |
+| ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) | Interactivity and behavior |
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Java JDK 21+
-- Apache Maven 3.9+
+
+No external dependencies required — just a modern browser! ✅
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/ChristopherDond/CRM-Pipeline-Flow.git
+# 1. Clone the repository
+git clone https://github.com/ChristopherDond/CRM_LandingPage.git
 
-# Navigate to project
-cd CRM-Pipeline-Flow/crm-pipeline
+# 2. Navigate to the project folder
+cd CRM_LandingPage
 
-# Run the application
-mvn javafx:run
-⚠️ Note: On first run, Maven will download JavaFX and Gson dependencies (1-2 minutes).
-🏗️ Architecture
-plain
-Copy
-crm-pipeline/
-├── pom.xml
-└── src/main/java/com/crm/
-    ├── Main.java                 # Application entry point
-    ├── model/
-    │   └── Lead.java             # Lead data model
-    ├── service/
-    │   └── LeadService.java      # Business logic + JSON persistence
-    └── view/
-        ├── KanbanBoard.java      # Main Kanban UI
-        └── LeadFormDialog.java   # Add/Edit lead modal
-Pattern: MSV (Model-Service-View)
-📋 Lead Data Model
-Table
-Field	Type	Description
-name	String	Full name (required)
-email	String	Contact email
-phone	String	Phone number
-company	String	Company name
-value	Double	Deal value in USD
-priority	Enum	HIGH / MEDIUM / LOW
-stage	String	Current pipeline stage
-notes	String	Internal observations
-created	Date	Auto-set on creation
-⌨️ Keyboard Shortcuts
-Table
-Key	Action
-Enter	Save form (when open)
-Esc	Close modal
-Double-click	Open edit form
-Right-click	Context menu
-💾 Data Storage
-All leads are automatically saved to crm_data.json in the project root. The file updates on every action (add, edit, move, delete) and restores automatically on next launch.
-🛠️ Tech Stack
-Java 21 (LTS) - Core language
-JavaFX 21 - UI framework
-Gson 2.10.1 - JSON persistence
-Maven 3.9+ - Build tool
-🤝 Contributing
-Fork the project
-Create your feature branch: git checkout -b feature/AmazingFeature
-Commit your changes: git commit -m 'Add AmazingFeature'
-Push to the branch: git push origin feature/AmazingFeature
-Open a Pull Request
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
-<p align="center">
-  Built with ☕ and JavaFX by <strong>Christopher Dondé</strong>
-</p>
+# 3. Open the main file in your browser
+# On Linux/macOS:
+open index.html
+
+# On Windows:
+start index.html
 ```
+
+> 💡 **Tip:** Use the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VS Code for a better development experience with hot-reload.
+
+---
+
+## 📁 Folder Structure
+
+```
+CRM_LandingPage/
+│
+├── 📄 index.html          # Main page
+├── 📁 css/
+│   ├── style.css          # Main styles
+│   └── responsive.css     # Media queries & responsiveness
+├── 📁 js/
+│   └── main.js            # Scripts and interactivity
+├── 📁 assets/
+│   ├── images/            # Images and illustrations
+│   └── icons/             # Icons and favicons
+└── 📄 README.md           # Project documentation
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are always welcome! If you have a suggestion to improve the project, follow the steps below:
+
+1. **Fork** the repository
+2. Create a **branch** for your feature (`git checkout -b feature/MyFeature`)
+3. **Commit** your changes (`git commit -m 'feat: add MyFeature'`)
+4. **Push** to the branch (`git push origin feature/MyFeature`)
+5. Open a **Pull Request**
+
+Please read the [contribution guidelines](CONTRIBUTING.md) before submitting your PR.
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See the [`LICENSE`](LICENSE) file for more information.
+
+---
+
+## 📬 Contact
+
+**Christopher Dond**
+
+[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](https://github.com/ChristopherDond)
+
+---
+
+<div align="center">
+
+Made with ❤️ by [ChristopherDond](https://github.com/ChristopherDond)
+
+⭐ If this project helped you, consider giving the repository a **star**!
+
+</div>
