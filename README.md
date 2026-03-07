@@ -8,7 +8,6 @@
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square)]()
 
@@ -26,7 +25,6 @@
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
 - [Getting Started](#-getting-started)
-- [Folder Structure](#-folder-structure)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
@@ -63,7 +61,6 @@
 |------------|---------|
 | ![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat&logo=html5&logoColor=white) | Semantic page structure |
 | ![CSS3](https://img.shields.io/badge/-CSS3-1572B6?style=flat&logo=css3&logoColor=white) | Styling and animations |
-| ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) | Interactivity and behavior |
 
 ---
 
@@ -91,25 +88,6 @@ start index.html
 ```
 
 > 💡 **Tip:** Use the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VS Code for a better development experience with hot-reload.
-
----
-
-## 📁 Folder Structure
-
-```
-CRM_LandingPage/
-│
-├── 📄 index.html          # Main page
-├── 📁 css/
-│   ├── style.css          # Main styles
-│   └── responsive.css     # Media queries & responsiveness
-├── 📁 js/
-│   └── main.js            # Scripts and interactivity
-├── 📁 assets/
-│   ├── images/            # Images and illustrations
-│   └── icons/             # Icons and favicons
-└── 📄 README.md           # Project documentation
-```
 
 ---
 
