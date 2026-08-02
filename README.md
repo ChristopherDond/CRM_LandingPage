@@ -1,3 +1,5 @@
+[Leia em Português (Brasil)](README-pt-br.md)
+
 <div align="center">
 
 <img src="https://img.shields.io/badge/CRM-Landing%20Page-6C63FF?style=for-the-badge&logo=google-chrome&logoColor=white" alt="CRM Landing Page" />
